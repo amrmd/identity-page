@@ -1,0 +1,447 @@
+@use "mixins" as *;
+@use "constant" as *;
+
+.section-hero {
+  height: 100%;
+  padding: 0;
+  background: var(--color-background);
+  user-select: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+
+  &, a {
+    color: var(--color-text);
+  }
+
+  a {
+    text-decoration: none;
+    transition: color var(--transition-smooth);
+
+    @include focus-visible;
+
+    @include hover-effects {
+      color: var(--color-action);
+    }
+  }
+
+  // Updated tooltip styles (now handled in base.scss)
+
+  // Hide image and text until preload is complete
+  .image,
+  .text {
+    display: none;
+  }
+
+  .image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 65%;
+    overflow: hidden;
+    background: #000000;
+    contain: layout style paint;
+
+    &,
+    img {
+      animation-fill-mode: both;
+      animation-duration: $hero-animation-delay + 1.76s;
+      animation-timing-function: cubic-bezier(0.160, 0.070, 0.185, 1.000);
+    }
+
+    // Modern picture/img element
+    picture {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+    }
+
+    img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      height: 100%;
+      width: auto;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    // Fade overlay
+    &::after {
+      content: '';
+      display: block;
+      animation-fill-mode: both;
+      animation-delay: $hero-animation-delay + 1.08s;
+      animation-duration: 0.68s;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 80px;
+      background: radial-gradient(farthest-side at 100% 50%, rgba($color-background, 0.5), transparent);
+    }
+  }
+
+  .text {
+    position: absolute;
+    top: 49%;
+    left: 65%;
+    width: min(450px, 90vw);
+    transform: translate(-40px, -50%);
+    font-size: clamp(14px, 2vw, 16px);
+    user-select: text;
+
+    h1,
+    p {
+      animation-name: hero-text;
+      animation-fill-mode: both;
+      animation-delay: $hero-animation-delay + 1.08s;
+      animation-duration: 1.08s;
+      animation-timing-function: cubic-bezier(0.175, 0.535, 0.285, 1.000);
+    }
+
+    h1 {
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      font-size: clamp(0.85em, 2vw, 0.95em);
+      font-weight: $font-weight-bold;
+    }
+
+    p {
+      font-weight: $font-weight-normal;
+      margin-top: $space-sm;
+      animation-delay: $hero-animation-delay + 1.20s;
+      line-height: $line-height-base;
+
+      a {
+        background: var(--color-surface);
+        border-radius: 2px;
+        padding: 0 3px;
+        transition: all var(--transition-smooth);
+
+        @include hover-effects {
+          background: var(--color-action);
+          color: var(--color-background);
+        }
+      }
+
+      .break-dot {
+        display: none;
+
+        @include media(md) {
+          display: inline;
+        }
+      }
+    }
+
+    // Social actions navigation
+    nav {
+      margin-top: $space-md;
+
+      .actions {
+        $icon-animation-delay: $hero-animation-delay + 1.88s;
+        $icon-each-animation-delay: 0.20s;
+
+        display: flex;
+        flex-wrap: wrap;
+        gap: $space-sm;
+        font-size: 1.5em;
+        list-style: none;
+
+        li {
+          position: relative;
+          animation-fill-mode: both;
+          animation-delay: $icon-animation-delay;
+          animation-duration: 0.68s;
+          animation-timing-function: cubic-bezier(0.175, 0.535, 0.285, 1.000);
+
+          &.action-belittle {
+            font-size: 0.85em;
+          }
+
+          a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            transition: all var(--transition-smooth);
+
+            @include hover-effects {
+              background: var(--color-surface);
+              transform: translateY(-2px);
+            }
+
+            i {
+              transition: transform var(--transition-smooth);
+            }
+
+            @include hover-effects {
+              i {
+                transform: scale(1.1);
+              }
+            }
+          }
+
+          // Staggered animation delays
+          @for $i from 1 through 10 {
+            &:nth-child(#{$i}) {
+              animation-delay: $icon-animation-delay + $icon-each-animation-delay * $i;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Show elements when preload is complete
+  .preload-complete & {
+    .image,
+    .text {
+      display: block;
+    }
+
+    .image {
+      animation-name: hero-image-container;
+    }
+    .image img {
+      animation-name: hero-image;
+    }
+    .image::after {
+      animation-name: hero-fade;
+    }
+    .text h1,
+    .text p {
+      animation-name: hero-text;
+    }
+    .actions li {
+      animation-name: hero-icon;
+    }
+  }
+
+  // Responsive breakpoints
+  @include media(xl) {
+    .text {
+      font-size: 19px;
+      font-weight: 300;
+
+      p {
+        margin-top: 13px;
+      }
+
+      nav .actions {
+        margin-top: 16px;
+        gap: $space-md;
+      }
+    }
+  }
+
+  @include media(lg) {
+    .image {
+      width: 50%;
+    }
+
+    .text {
+      left: 50%;
+    }
+  }
+
+  // Mobile optimizations
+  @media (max-width: 750px) {
+    .text nav .actions {
+      font-size: 1.875em; // 30px
+      gap: $space-lg;
+
+      li a {
+        width: 44px;
+        height: 44px;
+      }
+    }
+  }
+
+  // Portrait mobile layout
+  @media (max-width: 600px) {
+    .image {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: auto;
+      left: 0;
+      width: 100%;
+      height: 75%;
+
+      &::after {
+        top: auto;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        height: 30%;
+        width: 100%;
+        background: linear-gradient(to top, var(--color-background), transparent);
+      }
+    }
+
+    .text {
+      position: fixed;
+      top: auto;
+      bottom: 2%;
+      left: 0;
+      right: 0;
+      width: 100%;
+      padding: $space-lg;
+      transform: none;
+      text-align: center;
+      z-index: 10;
+
+      h1 {
+        font-size: clamp(1rem, 4vw, 1.2rem);
+      }
+
+      p {
+        margin-bottom: $space-sm;
+        font-size: clamp(0.875rem, 3.5vw, 1rem);
+
+        br {
+          display: none;
+        }
+
+        .break-dot {
+          display: inline;
+        }
+      }
+
+      nav {
+        margin-top: $space-lg;
+
+        .actions {
+          justify-content: center;
+        }
+      }
+    }
+
+    // Vertical animations for mobile
+    .preload-complete & {
+      .image {
+        animation-name: hero-image-container-vertical;
+      }
+      .image img {
+        animation-name: hero-image-vertical;
+      }
+      .image::after {
+        animation-name: hero-fade-vertical;
+      }
+      .text h1,
+      .text p {
+        animation-name: hero-text-vertical;
+      }
+      .actions li {
+        animation-name: hero-icon-vertical;
+      }
+    }
+  }
+}
+
+// Animation keyframes
+@keyframes hero-image-container {
+  from {
+    transform: translate(-100%, 0);
+  }
+  to {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes hero-image-container-vertical {
+  from {
+    transform: translate(0, -100%);
+  }
+  to {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes hero-image {
+  from {
+    transform: translate(0%, -50%);
+  }
+  to {
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes hero-image-vertical {
+  from {
+    transform: translate(-50%, 0%);
+  }
+  to {
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes hero-text {
+  from {
+    opacity: 0;
+    transform: translate(41px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes hero-text-vertical {
+  from {
+    opacity: 0;
+    transform: translate(0, 41px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes hero-icon {
+  from {
+    opacity: 0;
+    transform: translate(0, 22px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes hero-icon-vertical {
+  from {
+    opacity: 0;
+    transform: translate(0, 22px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes hero-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hero-fade-vertical {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

@@ -1,25 +1,34 @@
 {
-    "name": "identity-page",
-    "version": "0.0.1",
-    "author": "Fränz Friederes <fraenz@frieder.es>",
-    "homepage": "https://fraenz.frieder.es/",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "http://github.com/ffraenz/IdentityPage.git"
-    },
-    "homepage": "https://github.com/ffraenz/IdentityPage",
-    "bugs": {
-        "url": "https://github.com/ffraenz/IdentityPage/issues"
-    },
-    "devDependencies": {
-        "gulp": "~3.8.10",
-        "gulp-rename": "^1.2.0",
-        "gulp-concat": "^2.4.1",
-        "gulp-uglify": "^1.0.1",
-        "gulp-sourcemaps": "^1.2.8",
-        "gulp-ruby-sass": "^1.0.0",
-        "gulp-autoprefixer": "^1.0.1",
-        "gulp-minify-css": "^0.3.11"
-    }
+  "name": "identity-page",
+  "version": "1.0.0",
+  "description": "A responsive, minimal, single-page website featuring a large image and social links",
+  "type": "module",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "format": "prettier --write .",
+    "lint": "eslint . --ext .js,.ts --fix"
+  },
+  "author": "Fränz Friederes <fraenz@frieder.es>",
+  "license": "MIT",
+  "homepage": "https://github.com/ffraenz/IdentityPage",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ffraenz/IdentityPage.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ffraenz/IdentityPage/issues"
+  },
+  "keywords": ["identity", "portfolio", "personal-website", "responsive", "vite"],
+  "devDependencies": {
+    "vite": "^5.4.0",
+    "sass": "^1.77.0",
+    "@vitejs/plugin-legacy": "^5.4.0",
+    "eslint": "^8.57.0",
+    "prettier": "^3.3.0",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.40"
+  }
 }
